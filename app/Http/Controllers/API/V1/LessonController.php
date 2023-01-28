@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Filters\V1\LessonsFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLessonRequest;
 use App\Http\Requests\UpdateLessonRequest;
 use App\Http\Resources\LessonCollection;
 use App\Http\Resources\LessonResource;
 use App\Models\Lesson;
+use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
@@ -16,9 +18,15 @@ class LessonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new LessonCollection(Lesson::paginate());
+        $filter = new LessonsFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new LessonCollection(Lesson::paginate());
+        }else{
+            return new LessonCollection(Lesson::where($queryItems)->paginate());
+        }
     }
 
     /**

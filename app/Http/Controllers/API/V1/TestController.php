@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Filters\V1\TestsFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestRequest;
 use App\Http\Requests\UpdateTestRequest;
 use App\Http\Resources\TestCollection;
 use App\Http\Resources\TestResource;
 use App\Models\Test;
+use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
@@ -16,9 +18,15 @@ class TestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new TestCollection(Test::paginate());
+        $filter = new TestsFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new TestCollection(Test::paginate());
+        }else{
+            return new TestCollection(Test::where($queryItems)->paginate());
+        }
     }
 
     /**

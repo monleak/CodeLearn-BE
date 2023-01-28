@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateFeedbackRequest;
 use App\Http\Resources\FeedbackCollection;
 use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
+use Illuminate\Http\Request;
+use App\Filters\V1\FeedbacksFilter;
 
 class FeedbackController extends Controller
 {
@@ -16,9 +18,15 @@ class FeedbackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new FeedbackCollection(Feedback::paginate());
+        $filter = new FeedbacksFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new FeedbackCollection(Feedback::paginate());
+        }else{
+            return new FeedbackCollection(Feedback::where($queryItems)->paginate());
+        }
     }
 
     /**

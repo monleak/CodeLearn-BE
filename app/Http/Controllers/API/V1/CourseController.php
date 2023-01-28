@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Filters\V1\CoursesFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\CourseCollection;
+use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\Count;
 
 class CourseController extends Controller
 {
@@ -16,9 +19,15 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new CourseCollection(Course::paginate());
+        $filter = new CoursesFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new CourseCollection(Course::paginate());
+        }else{
+            return new CourseCollection(Course::where($queryItems)->paginate());
+        }
     }
 
     /**

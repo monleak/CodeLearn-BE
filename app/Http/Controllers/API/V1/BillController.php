@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Filters\V1\BillsFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBillRequest;
 use App\Http\Requests\UpdateBillRequest;
 use App\Http\Resources\BillCollection;
 use App\Http\Resources\BillResource;
 use App\Models\Bill;
+use Illuminate\Http\Request;
 
 
 class BillController extends Controller
@@ -17,9 +19,15 @@ class BillController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new BillCollection(Bill::paginate());
+        $filter = new BillsFilter();
+        $queryItems = $filter->transform($request);
+        if(count($queryItems) == 0){
+            return new BillCollection(Bill::paginate());
+        }else{
+            return new BillCollection(Bill::where($queryItems)->paginate());
+        }
     }
 
     /**
