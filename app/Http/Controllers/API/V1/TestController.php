@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTestRequest;
 use App\Http\Requests\UpdateTestRequest;
+use App\Http\Resources\TestCollection;
+use App\Http\Resources\TestResource;
 use App\Models\Test;
 
 class TestController extends Controller
@@ -16,7 +18,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        //
+        return new TestCollection(Test::paginate());
     }
 
     /**
@@ -48,7 +50,7 @@ class TestController extends Controller
      */
     public function show(Test $test)
     {
-        //
+        return new TestResource($test);
     }
 
     /**

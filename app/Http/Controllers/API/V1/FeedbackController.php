@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFeedbackRequest;
 use App\Http\Requests\UpdateFeedbackRequest;
+use App\Http\Resources\FeedbackCollection;
+use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
 
 class FeedbackController extends Controller
@@ -16,7 +18,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        //
+        return new FeedbackCollection(Feedback::paginate());
     }
 
     /**
@@ -48,7 +50,7 @@ class FeedbackController extends Controller
      */
     public function show(Feedback $feedback)
     {
-        //
+        return new FeedbackResource($feedback);
     }
 
     /**

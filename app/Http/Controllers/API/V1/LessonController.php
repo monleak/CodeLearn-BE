@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLessonRequest;
 use App\Http\Requests\UpdateLessonRequest;
+use App\Http\Resources\LessonCollection;
+use App\Http\Resources\LessonResource;
 use App\Models\Lesson;
 
 class LessonController extends Controller
@@ -16,7 +18,7 @@ class LessonController extends Controller
      */
     public function index()
     {
-        //
+        return new LessonCollection(Lesson::paginate());
     }
 
     /**
@@ -48,7 +50,7 @@ class LessonController extends Controller
      */
     public function show(Lesson $lesson)
     {
-        //
+        return new LessonResource($lesson);
     }
 
     /**

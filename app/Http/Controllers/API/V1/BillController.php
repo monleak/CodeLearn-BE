@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBillRequest;
 use App\Http\Requests\UpdateBillRequest;
+use App\Http\Resources\BillCollection;
+use App\Http\Resources\BillResource;
 use App\Models\Bill;
 
 
@@ -17,7 +19,7 @@ class BillController extends Controller
      */
     public function index()
     {
-        //
+        return new BillCollection(Bill::paginate());
     }
 
     /**
@@ -49,7 +51,7 @@ class BillController extends Controller
      */
     public function show(Bill $bill)
     {
-        //
+        return new BillResource($bill);
     }
 
     /**
