@@ -48,7 +48,7 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request)
     {
-        //
+        return new CourseResource(Course::create($request->all()));
     }
 
     /**

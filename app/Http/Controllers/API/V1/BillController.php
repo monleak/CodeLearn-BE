@@ -48,7 +48,7 @@ class BillController extends Controller
      */
     public function store(StoreBillRequest $request)
     {
-        //
+        return new BillResource(Bill::create($request->all()));
     }
 
     /**

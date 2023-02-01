@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StoreBillRequest extends FormRequest
 {
@@ -13,7 +16,7 @@ class StoreBillRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +24,18 @@ class StoreBillRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
-            //
+            'user_id' => [
+                'required',
+                'exists:App\Models\User,id',
+                Rule::unique('App\Models\Feedback')->where(function ($query) use ($request) {
+                    return $query->where('course_id', $request->course_id);
+                 }),
+            ],
+            'course_id' => ['required','exists:App\Models\Course,id'],
+            'pay' => ['required','numeric'],
         ];
     }
 }

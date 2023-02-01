@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTestRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreTestRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,11 @@ class StoreTestRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'lesson_id' => [
+                'required',
+                Rule::exists('App\Models\Lesson','id'),
+            ],
+            'content' => ['required'],
         ];
     }
 }

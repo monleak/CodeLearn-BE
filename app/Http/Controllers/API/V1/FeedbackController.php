@@ -47,7 +47,7 @@ class FeedbackController extends Controller
      */
     public function store(StoreFeedbackRequest $request)
     {
-        //
+        return new FeedbackResource(Feedback::create($request->all()));
     }
 
     /**

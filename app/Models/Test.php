@@ -9,6 +9,12 @@ class Test extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'lesson_id',
+        'content',
+        
+    ];
+
     public function lesson()
     {
         return $this->belongsTo(Lesson::class);

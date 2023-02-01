@@ -9,6 +9,14 @@ class Course extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'description',
+        'content',
+        'price',
+        'author',
+    ];
+
     public function feedbacks()
     {
         return $this->hasMany(Feedback::class);

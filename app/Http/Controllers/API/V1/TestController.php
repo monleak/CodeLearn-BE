@@ -47,7 +47,7 @@ class TestController extends Controller
      */
     public function store(StoreTestRequest $request)
     {
-        //
+        return new TestResource(Test::create($request->all()));
     }
 
     /**
