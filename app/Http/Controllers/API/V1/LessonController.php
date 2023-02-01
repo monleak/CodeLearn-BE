@@ -9,7 +9,9 @@ use App\Http\Requests\UpdateLessonRequest;
 use App\Http\Resources\LessonCollection;
 use App\Http\Resources\LessonResource;
 use App\Models\Lesson;
+use App\Models\Test;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LessonController extends Controller
 {
@@ -92,6 +94,7 @@ class LessonController extends Controller
      */
     public function destroy(Lesson $lesson)
     {
-        //
+        Test::where('lesson_id', $lesson->id)->delete();
+        $lesson->delete();
     }
 }
