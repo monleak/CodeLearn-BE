@@ -81,7 +81,7 @@ class TestController extends Controller
      */
     public function update(UpdateTestRequest $request, Test $test)
     {
-        //
+        $test->update($request->all());
     }
 
     /**

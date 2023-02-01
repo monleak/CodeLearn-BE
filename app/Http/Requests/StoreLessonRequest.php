@@ -24,7 +24,7 @@ class StoreLessonRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => ['required','numeric','exists:App\Models\Course,id'],
+            'course_id' => ['required','exists:App\Models\Course,id'],
             'title' => ['required'],
             'description' => ['required'],
             'content' => ['required'],

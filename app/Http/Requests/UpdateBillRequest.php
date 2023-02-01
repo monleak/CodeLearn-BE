@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 
 class UpdateBillRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class UpdateBillRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +23,35 @@ class UpdateBillRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+        if($method == 'PUT'){
+            return [
+                'user_id' => [
+                    'required',
+                    'exists:App\Models\User,id',
+                    Rule::unique('App\Models\Feedback')->where(function ($query) use ($request) {
+                        return $query->where('course_id', $request->course_id);
+                     }),
+                ],
+                'course_id' => ['required','exists:App\Models\Course,id'],
+                'pay' => ['required','numeric'],
+            ];
+        }else{
+            return [
+                'user_id' => [
+                    'sometimes',
+                    'required',
+                    'exists:App\Models\User,id',
+                    Rule::unique('App\Models\Feedback')->where(function ($query) use ($request) {
+                        return $query->where('course_id', $request->course_id);
+                     }),
+                ],
+                'course_id' => ['sometimes','required','exists:App\Models\Course,id'],
+                'pay' => ['sometimes','required','numeric'],
+            ];
+        }
+        
     }
 }

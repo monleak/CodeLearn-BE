@@ -82,7 +82,7 @@ class BillController extends Controller
      */
     public function update(UpdateBillRequest $request, Bill $bill)
     {
-        //
+        $bill->update($request->all());
     }
 
     /**

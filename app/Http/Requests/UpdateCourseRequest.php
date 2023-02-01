@@ -13,7 +13,7 @@ class UpdateCourseRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,23 @@ class UpdateCourseRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+        if($method == 'PUT'){
+            return [
+                'title' => ['required'],
+                'description' => ['required'],
+                'content' => ['required'],
+                'price' => ['required','numeric'],
+                'author' => ['required'],
+            ];
+        }else{
+            return [
+                'title' => ['sometimes','required'],
+                'description' => ['sometimes','required'],
+                'content' => ['sometimes','required'],
+                'price' => ['sometimes','required','numeric'],
+                'author' => ['sometimes','required'],
+            ];
+        }
     }
 }

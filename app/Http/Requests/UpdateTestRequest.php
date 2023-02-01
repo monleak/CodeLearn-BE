@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTestRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateTestRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +24,26 @@ class UpdateTestRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+        if ($method == 'PUT') {
+            return [
+                'lesson_id' => [
+                    'required',
+                    Rule::exists('App\Models\Lesson','id'),
+                ],
+                'content' => ['required'],
+            ];
+        }else{
+            return [
+                'lesson_id' => [
+                    'sometimes',
+                    'required',
+                    Rule::exists('App\Models\Lesson','id'),
+                ],
+                'content' => ['sometimes','required'],
+            ];
+        }
+
+        
     }
 }
