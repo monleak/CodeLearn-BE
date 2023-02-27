@@ -22,3 +22,6 @@ Route::get('/courses', function () {
 Route::get('/courses/{id}', function () {
     return view('main');
 });
+Route::get('/manage', function () {
+    return view('manage');
+});
