@@ -27,9 +27,10 @@ class CourseController extends Controller
     {
         $filter = new CoursesFilter();
         $queryItems = $filter->transform($request);
-        if(count($queryItems) == 0){
+
+        if (count($queryItems) == 0) {
             return new CourseCollection(Course::paginate());
-        }else{
+        } else {
             return new CourseCollection(Course::where($queryItems)->paginate());
         }
     }
@@ -41,7 +42,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -98,14 +99,14 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         //Khi xóa khóa học thì tất cả các bài học sẽ bị xóa theo (Kéo theo đó là các bài test đi kèm với các bài học)
-        $lessons = Lesson::where('course_id', $course->id)->get();
-        foreach ($lessons as $item) {
-            Test::where('lesson_id', $item->id)->delete();
-        }
-        Lesson::where('course_id', $course->id)->delete();
+        // $lessons = Lesson::where('course_id', $course->id)->get();
+        // foreach ($lessons as $item) {
+        //     Test::where('lesson_id', $item->id)->delete();
+        // }
+        // Lesson::where('course_id', $course->id)->delete();
 
-        Feedback::where('course_id', $course->id)->delete(); //Xóa các feedback
-        Bill::where('course_id', $course->id)->delete(); //Xóa các bill
+        // Feedback::where('course_id', $course->id)->delete(); //Xóa các feedback
+        // Bill::where('course_id', $course->id)->delete(); //Xóa các bill
 
         $course->delete();
     }

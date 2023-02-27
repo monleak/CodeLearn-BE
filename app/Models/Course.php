@@ -12,18 +12,14 @@ class Course extends Model
     protected $fillable = [
         'title',
         'description',
-        'content',
+        'detail',
         'price',
-        'author',
+        'image',
+        'lecturer',
     ];
 
-    public function feedbacks()
+    public function lecturer()
     {
-        return $this->hasMany(Feedback::class);
-    }
-
-    public function lessons()
-    {
-        return $this->hasMany(Lesson::class);
+        return $this->belongsTo(User::class, 'author_id');
     }
 }

@@ -25,10 +25,10 @@ class StoreCourseRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'description' => ['required'],
-            'content' => ['required'],
-            'price' => ['required','numeric'],
-            'author' => ['required'],
+            'description' => ['sometimes'],
+            'content' => ['sometimes'],
+            'price' => ['sometimes', 'numeric'],
+            'lecturer_id' => ['sometimes', 'numeric'],
         ];
     }
 }

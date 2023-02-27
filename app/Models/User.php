@@ -21,11 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
-        'birthDay',
+        'dob',
         'address',
-        'role',
         'sex',
-        'avatar',
+        'image',
         'password',
     ];
 
@@ -47,15 +46,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-
-    public function feedbacks(){
-        return $this->hasMany(Feedback::class);
-    }
-
-    public function courses()
-    {
-        //Người dùng sở hữu nhiều khóa học thông qua bill
-        return $this->hasManyThrough(Course::class,Bill::class);
-    }
 }

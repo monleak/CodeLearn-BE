@@ -15,10 +15,17 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
-            $table->integer('course_id');
             $table->string('title');
-            $table->string('description');
-            $table->string('content');
+            $table->longText('description')->nullable();
+            $table->string('status')->default("private");
+            $table->string('type');
+            $table->longText('content')->nullable();
+            $table->integer('duration')->default(0);
+
+            $table->integer('order');
+            $table->unsignedBigInteger('chapter_id');
+            $table->foreign('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
