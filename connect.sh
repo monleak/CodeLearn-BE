@@ -1,1 +1,1 @@
-docker exec -it app-elearning bash
+docker exec -it app-hust-elearning bash
