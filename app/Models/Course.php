@@ -15,11 +15,11 @@ class Course extends Model
         'detail',
         'price',
         'image',
-        'lecturer',
+        'lecturer_id',
     ];
 
     public function lecturer()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'lecturer_id');
     }
 }

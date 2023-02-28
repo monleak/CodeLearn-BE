@@ -3,53 +3,41 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Filters\V1\CoursesFilter;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCourseRequest;
-use App\Http\Requests\UpdateCourseRequest;
-use App\Models\Bill;
+use App\Http\Controllers\API\V1\ApiController;
+use App\Http\Requests\API\Course\StoreCourseRequest;
+use App\Http\Requests\API\Course\UpdateCourseRequest;
 use App\Models\Course;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\CourseCollection;
-use App\Models\Feedback;
-use App\Models\Lesson;
-use App\Models\Test;
 use Illuminate\Http\Request;
-use PHPUnit\Framework\Constraint\Count;
 
-class CourseController extends Controller
+class CourseController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return CourseCollection
      */
     public function index(Request $request)
     {
         $filter = new CoursesFilter();
         $queryItems = $filter->transform($request);
 
-        if (count($queryItems) == 0) {
-            return new CourseCollection(Course::paginate());
-        } else {
-            return new CourseCollection(Course::where($queryItems)->paginate());
+        $include = $request->query('include');
+        $courses = Course::where($queryItems);
+
+        if (isset($include)) {
+            $courses = $courses->with(['lecturer']);
         }
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
+        return new CourseCollection($courses->paginate()->appends($request->query()));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreCourseRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return CourseResource
      */
     public function store(StoreCourseRequest $request)
     {
@@ -60,10 +48,15 @@ class CourseController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
+     * @return CourseResource
      */
     public function show(Course $course)
     {
+        $include = request()->query('include');
+
+        if (isset($include)) {
+            $course->loadMissing('lecturer');
+        }
         return new CourseResource($course);
     }
 
