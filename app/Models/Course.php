@@ -13,7 +13,7 @@ class Course extends BaseModel
     protected $fillable = [
         'title',
         'description',
-        'detail',
+        'details',
         'price',
         'image',
         'lecturer_id',

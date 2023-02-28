@@ -27,11 +27,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::factory()
-            ->count(10)
+            ->count(5)
             ->create();
 
         \App\Models\Course::factory()
             ->count(10)
+            ->create();
+
+        \App\Models\Chapter::factory()
+            ->count(6)
             ->create();
 
         $this->call([

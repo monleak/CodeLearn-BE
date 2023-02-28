@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('description')->nullable();
-            $table->longText('detail')->nullable();
+            $table->longText('details')->nullable();
             $table->longText('image')->nullable();
 
-            $table->float('price')->default(0);
+            $table->bigInteger('price')->default(0);
             $table->unsignedBigInteger('lecturer_id')->nullable();
             $table->foreign('lecturer_id')->references('id')->on('users');
 

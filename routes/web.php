@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,15 +18,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('main');
 });
-Route::get('/courses', function () {
-    return view('main');
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/courses', 'index');
+    Route::get('/courses/{id}', 'index');
+    
+    Route::get('/cart', 'index');
+    Route::get('/my-learning', 'index');
+    Route::get('/learn/{courseId}/{lessonId}', 'index');
 });
-Route::get('/courses/{id}', function () {
-    return view('main');
+
+Route::controller(ManageController::class)->group(function () {
+    Route::group(['prefix' => 'manage'], function () {
+        Route::get('/', 'index');
+    });
 });
-Route::get('/manage', function () {
-    return view('manage');
-});
+
 Route::get('/welcome', function () {
     return view('welcome');
 });

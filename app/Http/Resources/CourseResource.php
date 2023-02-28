@@ -18,9 +18,11 @@ class CourseResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'detail' => $this->detail,
+            'details' => $this->details,
             'price' => $this->price,
+            'image' => $this->image ?? "https://desklass.com/resources/a43efd70-90a2-4492-80f5-8d43ad8ee3b9",
             'lecturer' => new UserResource($this->whenLoaded('lecturer')),
+            'chapters' => new ChapterCollection($this->whenLoaded('chapters')),
 
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

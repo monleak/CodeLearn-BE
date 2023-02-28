@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
-
+use App\Http\Controllers\API\V1\CourseController;
 use App\Http\Controllers\API\V1\PermissionController;
 use App\Http\Controllers\API\V1\LessonController;
 
@@ -34,7 +34,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
     Route::apiResource('users', UserController::class);
     Route::apiResource('chapters', ChapterController::class);
 
+    Route::get('courses/{course}/curriculum', [CourseController::class, 'getCurriculum']);
+
     Route::group(["prefix" => "lessons"], function () {
+        Route::get("{lesson}", [LessonController::class, 'show']);
         Route::post("create-lesson/{chapter}", [LessonController::class, 'store']);
         Route::delete("{lesson}", [LessonController::class, 'destroy']);
     });

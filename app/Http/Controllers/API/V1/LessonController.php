@@ -5,21 +5,12 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\API\V1\ApiController;
 use App\Http\Requests\API\Lesson\StoreLessonRequest;
 use App\Http\Requests\API\Lesson\UpdateLessonRequest;
+use App\Http\Resources\LessonResource;
 use App\Models\Chapter;
 use App\Models\Lesson;
 
 class LessonController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -46,11 +37,11 @@ class LessonController extends ApiController
      * Display the specified resource.
      *
      * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\LessonResource
      */
     public function show(Lesson $lesson)
     {
-        //
+        return new LessonResource($lesson);
     }
 
     /**
@@ -58,11 +49,19 @@ class LessonController extends ApiController
      *
      * @param  \App\Http\Requests\API\Lesson\UpdateLessonRequest  $request
      * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateLessonRequest $request, Lesson $lesson)
     {
-        //
+        $lesson->update([
+            "title" => $request->title,
+            "description" => $request->description,
+            "content" => $request->content,
+            "duration" => $request->duration,
+            "chapter_id" => $request->chapter_id,
+        ]);
+
+        return $this->respondSuccess(['lesson' => $lesson]);
     }
 
     /**

@@ -16,7 +16,7 @@ class ChapterController extends ApiController
      */
     public function index()
     {
-        return $this->respondSuccess(['chapter' => Chapter::with('lessons')->get()]);
+        return $this->respondSuccess(['chapter' => Chapter::all()]);
     }
 
     /**

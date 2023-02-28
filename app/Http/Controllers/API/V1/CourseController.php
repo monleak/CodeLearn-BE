@@ -23,12 +23,7 @@ class CourseController extends ApiController
         $filter = new CoursesFilter();
         $queryItems = $filter->transform($request);
 
-        $include = $request->query('include');
-        $courses = Course::where($queryItems);
-
-        if (isset($include)) {
-            $courses = $courses->with(['lecturer']);
-        }
+        $courses = Course::with(['lecturer'])->where($queryItems);
 
         return new CourseCollection($courses->paginate()->appends($request->query()));
     }
@@ -36,7 +31,7 @@ class CourseController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCourseRequest  $request
+     * @param  \App\Http\Requests\API\Course\StoreCourseRequest  $request
      * @return CourseResource
      */
     public function store(StoreCourseRequest $request)
@@ -52,55 +47,44 @@ class CourseController extends ApiController
      */
     public function show(Course $course)
     {
-        $include = request()->query('include');
-
-        if (isset($include)) {
-            $course->loadMissing('lecturer');
-        }
+        $course->loadMissing(['lecturer', 'chapters']);
         return new CourseResource($course);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Course $course)
-    {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCourseRequest  $request
+     * @param  \App\Http\Requests\API\Course\UpdateCourseRequest  $request
      * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateCourseRequest $request, Course $course)
     {
         $course->update($request->all());
+        return $this->respondSuccessWithMessage([], "Cập nhật khóa học thành công");
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Course  $course
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Course $course)
     {
-        //Khi xóa khóa học thì tất cả các bài học sẽ bị xóa theo (Kéo theo đó là các bài test đi kèm với các bài học)
-        // $lessons = Lesson::where('course_id', $course->id)->get();
-        // foreach ($lessons as $item) {
-        //     Test::where('lesson_id', $item->id)->delete();
-        // }
-        // Lesson::where('course_id', $course->id)->delete();
-
-        // Feedback::where('course_id', $course->id)->delete(); //Xóa các feedback
-        // Bill::where('course_id', $course->id)->delete(); //Xóa các bill
-
         $course->delete();
+        return $this->respondSuccessWithMessage([], "Xóa khóa học thành công");
+    }
+
+    /**
+     * Get all curriculum by course
+     *
+     * @param  \App\Models\Course  $course
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCurriculum(Course $course)
+    {
+        $course->loadMissing(['chapters.lessons']);
+        return $this->respondSuccess(['curriculum' => $course->chapters]);
     }
 }

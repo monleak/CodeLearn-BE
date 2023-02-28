@@ -26,6 +26,7 @@ class UpdateCourseRequest extends FormRequest
         return [
             'title' => ['required'],
             'description' => ['sometimes'],
+            'details' => ['sometimes'],
             'content' => ['sometimes'],
             'price' => ['sometimes', 'numeric'],
             'lecturer_id' => ['sometimes', 'numeric'],

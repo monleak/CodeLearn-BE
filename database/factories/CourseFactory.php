@@ -19,9 +19,10 @@ class CourseFactory extends Factory
         return [
             'title' => 'Course ' . fake()->numberBetween(1, 9),
             'description' => fake()->text(100),
-            'detail' => fake()->text(200),
-            'price' => fake()->numberBetween(1, 9) * 100000,
-            'lecturer_id' => 1,
+            'details' => fake()->sentence(10),
+            'image' => fake()->imageUrl(640, 480, 'technics', true),
+            'price' => fake()->numberBetween(1, 20) * 100000,
+            'lecturer_id' => fake()->numberBetween(1, 3),
         ];
     }
 }
