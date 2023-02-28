@@ -17,15 +17,19 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('description')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->string('status')->default("private");
-            $table->string('type');
+            $table->string('type')->nullable();
             $table->longText('content')->nullable();
             $table->integer('duration')->default(0);
 
-            $table->integer('order');
+            $table->integer('order')->default(0);
             $table->unsignedBigInteger('chapter_id');
             $table->foreign('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
 
+            $table->unsignedBigInteger('creator_id')->nullable();
+            $table->foreign('creator_id')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

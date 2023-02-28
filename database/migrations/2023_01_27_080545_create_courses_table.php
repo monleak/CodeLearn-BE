@@ -24,6 +24,9 @@ return new class extends Migration
             $table->unsignedBigInteger('lecturer_id')->nullable();
             $table->foreign('lecturer_id')->references('id')->on('users');
 
+            $table->unsignedBigInteger('creator_id')->nullable();
+            $table->foreign('creator_id')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

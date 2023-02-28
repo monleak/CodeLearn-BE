@@ -18,9 +18,13 @@ return new class extends Migration
             $table->string('title');
             $table->longText('description')->nullable();
 
-            $table->integer('order');
+            $table->integer('order')->default(0);
             $table->unsignedBigInteger('course_id');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+
+            $table->unsignedBigInteger('creator_id')->nullable();
+            $table->foreign('creator_id')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

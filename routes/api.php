@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\API\V1\Auth\LoginController;
-use App\Http\Controllers\API\V1\Auth\RegisterController;
-use App\Http\Controllers\API\V1\CourseController;
-use App\Http\Controllers\API\V1\PermissionController;
-use App\Http\Controllers\API\V1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\API\V1\Auth\LoginController;
+use App\Http\Controllers\API\V1\Auth\RegisterController;
+
+use App\Http\Controllers\API\V1\PermissionController;
+use App\Http\Controllers\API\V1\LessonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,12 @@ Route::middleware('auth:sanctum')->get('/current-user', function (Request $reque
 Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function () {
     Route::apiResource('courses', CourseController::class);
     Route::apiResource('users', UserController::class);
+    Route::apiResource('chapters', ChapterController::class);
+
+    Route::group(["prefix" => "lessons"], function () {
+        Route::post("create-lesson/{chapter}", [LessonController::class, 'store']);
+        Route::delete("{lesson}", [LessonController::class, 'destroy']);
+    });
 
     Route::group(["prefix" => "role"], function () {
         Route::get("all", [PermissionController::class, 'getAllRoles']);

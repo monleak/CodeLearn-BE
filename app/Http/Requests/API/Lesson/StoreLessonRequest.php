@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\API\Course;
+namespace App\Http\Requests\API\Lesson;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCourseRequest extends FormRequest
+class StoreLessonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,7 @@ class UpdateCourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required'],
-            'description' => ['sometimes'],
-            'content' => ['sometimes'],
-            'price' => ['sometimes', 'numeric'],
-            'lecturer_id' => ['sometimes', 'numeric'],
+            "title" => ["required"],
         ];
     }
 }
