@@ -16,10 +16,14 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
-            $table->string('content');
-            $table->integer('price'); //Giá tiền khóa học
-            $table->string('author');
+            $table->longText('description')->nullable();
+            $table->longText('detail')->nullable();
+            $table->longText('image')->nullable();
+
+            $table->float('price')->default(0);
+            $table->unsignedBigInteger('lecturer_id')->nullable();
+            $table->foreign('lecturer_id')->references('id')->on('users');
+
             $table->timestamps();
         });
     }

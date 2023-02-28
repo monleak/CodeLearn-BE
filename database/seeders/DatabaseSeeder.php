@@ -3,10 +3,16 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+// use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
+    // Prevent from triggering model events
+    use WithoutModelEvents;
+
     /**
      * Seed the application's database.
      *
@@ -14,30 +20,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\User::updateOrCreate(['email' => 'admin@study.soict.ai'], [
+            'name' => 'Super Admin',
+            'email' => 'admin@study.soict.ai',
+            'password' => bcrypt('12345678'),
+        ]);
+
         \App\Models\User::factory()
-                ->count(10)
-                ->create();
+            ->count(10)
+            ->create();
 
-        \App\Models\Course::factory()  
-                ->count(20)
-                ->hasLessons(5)
-                ->create();
-        
-        \App\Models\Test::factory()
-                ->count(20)
-                ->create();
+        \App\Models\Course::factory()
+            ->count(10)
+            ->create();
 
-        \App\Models\Feedback::factory()
-                ->count(10)
-                ->create();
-
-        \App\Models\Bill::factory()
-                ->count(5)
-                ->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class,
+        ]);
     }
 }
