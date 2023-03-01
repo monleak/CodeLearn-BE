@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\CourseController;
 use App\Http\Controllers\API\V1\PermissionController;
 use App\Http\Controllers\API\V1\LessonController;
+use App\Http\Controllers\API\V1\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +21,12 @@ use App\Http\Controllers\API\V1\LessonController;
 |
 */
 
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function () {
+    // Authentication APIs
     Route::post('login', [LoginController::class, 'login']);
     Route::post('register', [RegisterController::class, 'register']);
-});
+    Route::middleware('auth:sanctum')->get('/current-user', [UserController::class, 'currentUser']);
 
-Route::middleware('auth:sanctum')->get('/current-user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], function () {
     Route::apiResource('courses', CourseController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('chapters', ChapterController::class);

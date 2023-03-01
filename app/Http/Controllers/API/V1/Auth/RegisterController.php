@@ -31,9 +31,11 @@ class RegisterController extends ApiController
         $input['password'] = bcrypt($input['password']);
 
         $user = User::create($input);
-        $success['token'] =  $user->createToken('HUST eLearning')->plainTextToken;
-        $success['name'] =  $user->name;
+        $token =  $user->createToken('HUST eLearning')->plainTextToken;
 
-        return $this->respondSuccessWithMessage($success, 'User register successfully.');
+        return $this->respondSuccessWithMessage([
+            'user' => $user,
+            'token' => $token,
+        ], 'User register successfully.');
     }
 }

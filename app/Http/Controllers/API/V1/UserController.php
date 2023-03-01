@@ -16,6 +16,31 @@ class UserController extends ApiController
         return new UserCollection($users);
     }
 
+    public function currentUser(Request $request)
+    {
+        $user = $request->user();
+
+        $userRoles = $user->roles;
+        $permissions = $user->getAllPermissions();
+        $permissions = $permissions->map(function ($permission) use ($userRoles) {
+            $roles = [];
+            foreach ($userRoles as $role) {
+                if (in_array($role->name, $permission->roles->pluck("name")->toArray())) {
+                    $roles[] = $role;
+                }
+            }
+            $permission->roles = $roles;
+
+            return $permission;
+        });
+        $permissions = collect($permissions)->pluck("name");
+
+        return $this->respondSuccess([
+            "user" => new UserResource($user),
+            "permissions" => $permissions,
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *

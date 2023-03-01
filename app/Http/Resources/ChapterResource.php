@@ -19,7 +19,9 @@ class ChapterResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
 
-            'lessons' => new LessonCollection($this->whenLoaded('lessons')),
+            'lessons' => $this->whenLoaded('lessons', function () {
+                return LessonResource::collection($this->lessons);
+            }),
         ];
     }
 }

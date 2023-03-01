@@ -18,10 +18,12 @@ class LoginController extends ApiController
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             /** @var \App\Models\User $user **/
             $user = Auth::user();
-            $success['name'] = $user->name;
-            $success['token'] =  $user->createToken('HUST eLearning')->plainTextToken;
+            $token =  $user->createToken('HUST eLearning')->plainTextToken;
 
-            return $this->respondSuccessWithMessage($success, 'User login successfully');
+            return $this->respondSuccessWithMessage([
+                'user' => $user,
+                'token' => $token,
+            ], 'User login successfully');
         } else {
             return $this->respondError('Unauthorised.', ['error' => 'Unauthorised']);
         }
