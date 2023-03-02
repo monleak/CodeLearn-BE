@@ -78,7 +78,6 @@ class RoleSeeder extends Seeder
                         "name" => $role["name"],
                         "description" => $role["description"],
                         "type" => $role["type"],
-                        "order" => $role["order"],
                     ]
                 );
             }

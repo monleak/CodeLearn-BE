@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\API\V1\ApiController;
 use App\Http\Requests\API\Role\CreateRoleRequest;
 use App\Http\Requests\API\Role\UpdateRoleRequest;
+use App\Http\Resources\PermissionResource;
+use App\Http\Resources\RoleResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
@@ -15,13 +17,13 @@ class PermissionController extends ApiController
     public function getAllRoles()
     {
         $roles = Role::with(["permissions"])->get();
-        return $this->respondSuccess($roles);
+        return RoleResource::collection($roles);
     }
 
     public function getAllPermissions()
     {
         $permissions = Permission::all();
-        return $this->respondSuccess($permissions);
+        return PermissionResource::collection($permissions);
     }
 
     // public function getAllEmployeesWithRole(Request $request)
@@ -80,19 +82,16 @@ class PermissionController extends ApiController
             "description" => $description,
         ]);
 
-        return $this->respondSuccess($role);
+        return new RoleResource($role->loadMissing("permissions"));
     }
 
     public function updateRole(Role $role, UpdateRoleRequest $request)
     {
-        $description = $request->description;
-        $role = $role->update([
-            "description" => $description,
+        $role->update([
+            "description" => $request->description,
         ]);
 
-        return $this->respondSuccess([
-            "role" => $role
-        ]);
+        return new RoleResource($role);
     }
 
     public function deleteRole(Role $role)

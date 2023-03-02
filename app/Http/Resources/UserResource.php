@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'description' => $this->description,
             'image' => $this->image,
             'roles' => $this->whenLoaded('roles', function () {
-                return RoleResourse::collection($this->roles);
+                return RoleResource::collection($this->roles);
             }),
         ];
     }
