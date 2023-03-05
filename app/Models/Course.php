@@ -39,4 +39,9 @@ class Course extends BaseModel
     {
         return $this->hasMany(Chapter::class, 'course_id');
     }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class, 'course_id');
+    }
 }

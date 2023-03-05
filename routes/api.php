@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\CourseController;
+use App\Http\Controllers\API\V1\FeedbackController;
 use App\Http\Controllers\API\V1\PermissionController;
 use App\Http\Controllers\API\V1\LessonController;
 use App\Http\Controllers\API\V1\UserController;
@@ -56,5 +57,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
 
         Route::post("{permission}/add-to-role/{role}", [PermissionController::class, 'addPermissionToRole']);
         Route::put("{permission}/remove-from-role/{role}", [PermissionController::class, 'removePermissionFromRole']);
+    });
+    Route::group(["prefix" => "feedback"], function () {
+        Route::get("/", [FeedbackController::class, 'index']);
+        Route::post("create", [FeedbackController::class, 'store']);
+        Route::put("update/{feedback}", [FeedbackController::class, 'update']);
     });
 });
