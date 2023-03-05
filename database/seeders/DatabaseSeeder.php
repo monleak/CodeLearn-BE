@@ -37,6 +37,10 @@ class DatabaseSeeder extends Seeder
         \App\Models\Chapter::factory()
             ->count(6)
             ->create();
+        
+        \App\Models\Bill::factory()
+            ->count(10)
+            ->create();
 
         $this->call([
             PermissionSeeder::class,
