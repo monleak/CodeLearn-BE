@@ -25,7 +25,7 @@ class StoreChapterRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'description' => ['required'],
+            'description' => ['sometimes'],
             'course_id' => ['required', 'numeric'],
         ];
     }

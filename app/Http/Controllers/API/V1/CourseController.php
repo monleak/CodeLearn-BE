@@ -23,9 +23,16 @@ class CourseController extends ApiController
         $filter = new CoursesFilter();
         $queryItems = $filter->transform($request);
 
-        $courses = Course::with(['lecturer'])->where($queryItems);
+        $limit = $request->query('limit');
+        $courses = Course::with('lecturer')->where($queryItems);
 
-        return new CourseCollection($courses->paginate()->appends($request->query()));
+        if (isset($limit)) {
+            $courses = $courses->paginate($limit)->appends($request->query());
+        } else {
+            $courses = $courses->get();
+        }
+
+        return new CourseCollection($courses);
     }
 
     /**

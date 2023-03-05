@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\API\V1\ApiController;
-use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,8 +11,20 @@ class UserController extends ApiController
 {
     public function index(Request $request)
     {
-        $users = User::paginate()->appends($request->query());
-        return new UserCollection($users);
+        $limit = $request->limit ?? 15;
+        $users = User::query();
+
+        if (isset($request->search)) {
+            $search = $request->search;
+            $users = $users->where('name', 'like', "%$search%");
+        }
+
+        if (isset($request->include)) {
+            $include = $request->include;
+            $users = $users->with($include);
+        }
+
+        return UserResource::collection($users->paginate($limit)->appends($request->query()));
     }
 
     public function currentUser(Request $request)
