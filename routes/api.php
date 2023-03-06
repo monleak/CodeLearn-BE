@@ -9,6 +9,8 @@ use App\Http\Controllers\API\V1\CourseController;
 use App\Http\Controllers\API\V1\PermissionController;
 use App\Http\Controllers\API\V1\LessonController;
 use App\Http\Controllers\API\V1\UserController;
+use App\Http\Controllers\API\V1\InvoiceController;
+use App\Http\Controllers\API\V1\InvoiceCourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,4 +59,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
         Route::post("{permission}/add-to-role/{role}", [PermissionController::class, 'addPermissionToRole']);
         Route::put("{permission}/remove-from-role/{role}", [PermissionController::class, 'removePermissionFromRole']);
     });
+
+    // Route::group(["prefix" => "invoice"], function () {
+    //     Route::post("create", [InvoiceController::class, 'createInvoice']);
+    //     Route::post("addInvoiceCourse", [InvoiceCourseController::class, 'addInvoiceCourse']);
+    // });
+    Route::apiResource('invoices', InvoiceController::class);
+    Route::apiResource('invoiceCourses', InvoiceCourseController::class);
+    Route::get("my-learning/{id}", [InvoiceCourseController::class, 'getAllCourse']);
 });
