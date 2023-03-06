@@ -8,9 +8,8 @@ class CoursesFilter extends ApiFilter{
         'id' => ['eq','neq','lt','lte','gt','gte'],
         'title' => ['eq'],
         'description' => ['eq'],
-        'content' => ['eq'],
+        'detail' => ['eq'],
         'price' => ['eq','neq','lt','lte','gt','gte'],
-        'author' => ['eq'],
     ];
 
     

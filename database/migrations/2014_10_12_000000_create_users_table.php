@@ -17,14 +17,17 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone')->unique();
-            $table->dateTime('birthDay');
-            $table->enum('sex',['male','female','null']); //nam, nữ, không xác định
-            $table->string('avatar')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone')->unique()->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->dateTime('dob')->nullable();
+            $table->string('address')->nullable();
+            $table->longText('description')->nullable();
+            $table->enum('sex', ['male', 'female', 'other'])->nullable();
+            $table->string('image')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
         });
     }
 

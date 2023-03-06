@@ -3,27 +3,40 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Course extends Model
+class Course extends BaseModel
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
         'description',
-        'content',
+        'details',
         'price',
-        'author',
+        'image',
+        'lecturer_id',
     ];
 
-    public function feedbacks()
+    protected static function deleteRelation($model)
     {
-        return $this->hasMany(Feedback::class);
+        parent::deleteRelation($model);
+
+        if (!empty($model->chapters)) {
+            $model->chapters->each(function ($item) {
+                $item->delete();
+            });
+        }
     }
 
-    public function lessons()
+    public function lecturer()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->belongsTo(User::class, 'lecturer_id');
+    }
+
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class, 'course_id');
     }
 }

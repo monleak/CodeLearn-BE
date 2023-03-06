@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -21,9 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
-        'birthDay',
+        'description',
+        'dob',
+        'address',
         'sex',
-        'avatar',
+        'image',
         'password',
     ];
 
@@ -46,14 +49,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    public function feedbacks(){
-        return $this->hasMany(Feedback::class);
-    }
-
-    public function courses()
-    {
-        //Người dùng sở hữu nhiều khóa học thông qua bill
-        return $this->hasManyThrough(Course::class,Bill::class);
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
     }
 }

@@ -2,61 +2,42 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Filters\V1\LessonsFilter;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreLessonRequest;
-use App\Http\Requests\UpdateLessonRequest;
-use App\Http\Resources\LessonCollection;
+use App\Http\Controllers\API\V1\ApiController;
+use App\Http\Requests\API\Lesson\StoreLessonRequest;
+use App\Http\Requests\API\Lesson\UpdateLessonRequest;
 use App\Http\Resources\LessonResource;
+use App\Models\Chapter;
 use App\Models\Lesson;
-use App\Models\Test;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class LessonController extends Controller
+class LessonController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $filter = new LessonsFilter();
-        $queryItems = $filter->transform($request);
-        if(count($queryItems) == 0){
-            return new LessonCollection(Lesson::paginate());
-        }else{
-            return new LessonCollection(Lesson::where($queryItems)->paginate());
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreLessonRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\API\Lesson\StoreLessonRequest  $request
+     * @param  \App\Models\Chapter  $chapter
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreLessonRequest $request)
+    public function store(StoreLessonRequest $request, Chapter $chapter)
     {
-        return new LessonResource(Lesson::create($request->all()));
+        $lastChapter = Lesson::where("chapter_id", $chapter->id)->orderBy("order", "desc")->first();
+        $order = $lastChapter ? $lastChapter->order + 1 : 1;
+
+        $lesson = Lesson::create([
+            "title" => $request->title,
+            "description" => $request->description,
+            "order" => $order,
+            "chapter_id" => $chapter->id,
+        ]);
+
+        return $this->respondSuccess(['lesson' => $lesson]);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\LessonResource
      */
     public function show(Lesson $lesson)
     {
@@ -64,37 +45,34 @@ class LessonController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Lesson $lesson)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateLessonRequest  $request
+     * @param  \App\Http\Requests\API\Lesson\UpdateLessonRequest  $request
      * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateLessonRequest $request, Lesson $lesson)
     {
-        $lesson->update($request->all());
+        $lesson->update([
+            "title" => $request->title,
+            "description" => $request->description,
+            "content" => $request->content,
+            "duration" => $request->duration,
+            "chapter_id" => $request->chapter_id,
+        ]);
+
+        return $this->respondSuccess(['lesson' => $lesson]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Lesson  $lesson
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Lesson $lesson)
     {
-        Test::where('lesson_id', $lesson->id)->delete();
         $lesson->delete();
+        return $this->respondSuccessWithMessage([], "Xóa bài thành công");
     }
 }
