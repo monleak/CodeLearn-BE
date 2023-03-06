@@ -9,19 +9,25 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'user_id',
         'amount',
         'status',
-        'billed_dated',
         'paid_dated'
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function InvoiceCourses(){
-        return $this->hasMany(InvoiceCourse::class);
+
+    public function invoice_courses()
+    {
+        return $this->hasMany(InvoiceCourse::class, 'invoice_id');
     }
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'invoice_courses', 'invoice_id', 'course_id');
+    }
 }

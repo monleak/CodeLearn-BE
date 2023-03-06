@@ -17,9 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('amount');
-            $table->string('status'); //Billed, Paid, Void
-            $table->dateTime('billed_dated');
+            $table->bigInteger('amount')->default(0);
+            $table->string('status')->default('billed');   // billed / paid / void
             $table->dateTime('paid_dated')->nullable();
             $table->timestamps();
         });

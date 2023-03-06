@@ -19,8 +19,13 @@ class InvoiceResource extends JsonResource
             'user_id' => $this->user_id,
             'amount' => $this->amount,
             'status' => $this->status,
-            'billed_dated' => $this->billed_date,
-            'paid_dated' => $this->paid_date,
+
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+
+            'courses' => $this->whenLoaded('courses', function () {
+                return CourseResource::collection($this->courses);
+            }),
         ];
     }
 }

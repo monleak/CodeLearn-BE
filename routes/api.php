@@ -60,11 +60,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
         Route::put("{permission}/remove-from-role/{role}", [PermissionController::class, 'removePermissionFromRole']);
     });
 
-    // Route::group(["prefix" => "invoice"], function () {
-    //     Route::post("create", [InvoiceController::class, 'createInvoice']);
-    //     Route::post("addInvoiceCourse", [InvoiceCourseController::class, 'addInvoiceCourse']);
-    // });
+    Route::post("purchase", [InvoiceController::class, 'purchase']);
     Route::apiResource('invoices', InvoiceController::class);
-    Route::apiResource('invoiceCourses', InvoiceCourseController::class);
-    Route::get("my-learning/{id}", [InvoiceCourseController::class, 'getAllCourse']);
 });
