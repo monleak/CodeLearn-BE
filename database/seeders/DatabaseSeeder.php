@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Invoice::factory()
             ->count(6)
             ->create();
-        \App\Models\Invoice_Course::factory()
+        \App\Models\InvoiceCourse::factory()
             ->count(6)
             ->create();
     }

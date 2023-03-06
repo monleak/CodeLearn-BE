@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Invoice_Course;
+use App\Models\InvoiceCourse;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class InvoiceCoursePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Invoice_Course  $invoiceCourse
+     * @param  \App\Models\InvoiceCourse  $invoiceCourse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Invoice_Course $invoiceCourse)
+    public function view(User $user, InvoiceCourse $invoiceCourse)
     {
         //
     }
@@ -48,10 +48,10 @@ class InvoiceCoursePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Invoice_Course  $invoiceCourse
+     * @param  \App\Models\InvoiceCourse  $invoiceCourse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Invoice_Course $invoiceCourse)
+    public function update(User $user, InvoiceCourse $invoiceCourse)
     {
         //
     }
@@ -60,10 +60,10 @@ class InvoiceCoursePolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Invoice_Course  $invoiceCourse
+     * @param  \App\Models\InvoiceCourse  $invoiceCourse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Invoice_Course $invoiceCourse)
+    public function delete(User $user, InvoiceCourse $invoiceCourse)
     {
         //
     }
@@ -72,10 +72,10 @@ class InvoiceCoursePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Invoice_Course  $invoiceCourse
+     * @param  \App\Models\InvoiceCourse  $invoiceCourse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Invoice_Course $invoiceCourse)
+    public function restore(User $user, InvoiceCourse $invoiceCourse)
     {
         //
     }
@@ -84,10 +84,10 @@ class InvoiceCoursePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Invoice_Course  $invoiceCourse
+     * @param  \App\Models\InvoiceCourse  $invoiceCourse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Invoice_Course $invoiceCourse)
+    public function forceDelete(User $user, InvoiceCourse $invoiceCourse)
     {
         //
     }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreInvoice_CourseRequest extends FormRequest
+class StoreInvoiceCourseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreInvoice_CourseRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StoreInvoice_CourseRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'invoice_id' => ['required', 'exists:App\Models\Invoice,id'],
+            'course_id' => ['required', 'exists:App\Models\Course,id']
         ];
     }
 }

@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('invoice__courses', function (Blueprint $table) {
+        Schema::create('invoice_courses', function (Blueprint $table) {
             $table->id();
-            $table->integer('invoice_id');
+            $table->unsignedBigInteger('invoice_id');
             $table->foreign('invoice_id')->references('id')->on('invoices');
-            $table->integer('course_id');
+            $table->unsignedBigInteger('course_id');
             $table->foreign('course_id')->references('id')->on('courses');
             $table->timestamps();
         });
