@@ -66,4 +66,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
     // });
     Route::apiResource('invoices', InvoiceController::class);
     Route::apiResource('invoiceCourses', InvoiceCourseController::class);
+    Route::get("my-learning/{id}", [InvoiceCourseController::class, 'getAllCourse']);
 });

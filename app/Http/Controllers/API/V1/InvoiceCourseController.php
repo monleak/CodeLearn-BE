@@ -6,10 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInvoiceCourseRequest;
 use App\Http\Requests\UpdateInvoiceCourseRequest;
 use App\Http\Resources\InvoiceCourseResource;
+use App\Models\Invoice;
 use App\Models\InvoiceCourse;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceCourseController extends Controller
 {
+    public function getAllCourse($id){
+        // $courses = InvoiceCourse::select('*')->distinct()->whereIn('invoice_id',$invoice);
+
+        $invoice = DB::table('invoices')->select('id')->where('user_id','=',$id);
+        $courses = DB::table('invoice_courses')->select('course_id')->distinct()->whereIn('invoice_id',$invoice);
+        return $courses->get();;
+    }
     /**
      * Display a listing of the resource.
      *
