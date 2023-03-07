@@ -62,4 +62,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
 
     Route::post("purchase", [InvoiceController::class, 'purchase']);
     Route::apiResource('invoices', InvoiceController::class);
+    
+    Route::get("my-learning", [InvoiceController::class, 'getMyCourse'])->middleware('auth:sanctum');
 });

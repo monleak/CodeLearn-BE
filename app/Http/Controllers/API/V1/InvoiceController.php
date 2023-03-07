@@ -8,6 +8,8 @@ use App\Http\Requests\API\Invoice\UpdateInvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
 use App\Models\InvoiceCourse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends ApiController
 {
@@ -35,6 +37,18 @@ class InvoiceController extends ApiController
         }
 
         return new InvoiceResource($invoice->loadMissing('courses'));
+    }
+
+    public function getMyCourse(Request $request)
+    {
+        $user = $request->user();
+        $userId = $user->id;
+
+        $myInvoice = DB::table('invoices')->select('id')->where('user_id','=',$userId);
+        $listIDCourses = DB::table('invoice_courses')->select('course_id')->distinct()->whereIn('invoice_id',$myInvoice);
+        $myCourse = DB::table('courses')->select('*')->whereIn('id',$listIDCourses);
+        return $myCourse->get();;
+
     }
 
     /**
