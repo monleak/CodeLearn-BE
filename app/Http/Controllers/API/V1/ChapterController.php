@@ -6,6 +6,8 @@ use App\Http\Controllers\API\V1\ApiController;
 use App\Http\Requests\API\Chapter\StoreChapterRequest;
 use App\Http\Requests\API\Chapter\UpdateChapterRequest;
 use App\Models\Chapter;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChapterController extends ApiController
 {
@@ -58,6 +60,15 @@ class ChapterController extends ApiController
             "chapter" => $chapter,
             "lesson" => $lessons
         ]);
+    }
+
+    public function updateOrder(Request $request){
+        $newOrders = $request->newOrders;
+        foreach($newOrders as $newOrder){
+            DB::table('chapters')
+            ->where('id',$newOrder['idChapter'])
+            ->update(array('order' => $newOrder['newOrder']));
+        }
     }
 
     /**

@@ -33,6 +33,8 @@ class RegisterController extends ApiController
         $user = User::create($input);
         $token =  $user->createToken('HUST eLearning')->plainTextToken;
 
+        $user->assignRole('free_account');
+
         return $this->respondSuccessWithMessage([
             'user' => $user,
             'token' => $token,

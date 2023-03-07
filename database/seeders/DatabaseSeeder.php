@@ -20,11 +20,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call([
+            PermissionSeeder::class,
+            RoleSeeder::class,
+        ]);
+
         \App\Models\User::updateOrCreate(['email' => 'admin@study.soict.ai'], [
             'name' => 'Super Admin',
             'email' => 'admin@study.soict.ai',
             'password' => bcrypt('12345678'),
-        ]);
+        ])->assignRole('super_admin');
 
         \App\Models\User::factory()
             ->count(5)
@@ -37,10 +42,5 @@ class DatabaseSeeder extends Seeder
         \App\Models\Chapter::factory()
             ->count(6)
             ->create();
-
-        $this->call([
-            PermissionSeeder::class,
-            RoleSeeder::class,
-        ]);
     }
 }

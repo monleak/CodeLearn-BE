@@ -8,8 +8,8 @@
 
     <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro-v6@44659d9/css/all.min.css" rel="stylesheet"
         type="text/css" />
-    <script type="module" crossorigin src="/static/manage/js/main.39d27e63.js"></script>
-    <link rel="stylesheet" href="/static/manage/css/main.ae105128.css">
+    <script type="module" crossorigin src="/static/manage/js/main.6ed60b40.js"></script>
+    <link rel="stylesheet" href="/static/manage/css/main.f6359e12.css">
 </head>
 
 <body>
