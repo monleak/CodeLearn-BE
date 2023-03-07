@@ -9,12 +9,18 @@ class InvoiceCourse extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
+    protected $fillable = [
         'invoice_id',
         'course_id'
     ];
 
-    public function invoice(){
-        return $this->belongsTo(Invoice::class);
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class, 'invoice_id');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
     }
 }

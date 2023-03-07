@@ -2,87 +2,64 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreInvoiceRequest;
-use App\Http\Requests\UpdateInvoiceRequest;
+use App\Http\Controllers\API\V1\ApiController;
+use App\Http\Requests\API\Invoice\StoreInvoiceRequest;
+use App\Http\Requests\API\Invoice\UpdateInvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoice;
+use App\Models\InvoiceCourse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class InvoiceController extends Controller
+class InvoiceController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreInvoiceRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\API\Invoice\StoreInvoiceRequest  $request
+     * @return \App\Http\Resources\InvoiceResource
      */
-    public function store(StoreInvoiceRequest $request)
+    public function purchase(StoreInvoiceRequest $request)
     {
-        return new InvoiceResource(Invoice::create($request->all()));
+        if (!empty($request->courses)) {
+            $invoice = Invoice::create([
+                'user_id' => $request->user_id,
+                'amount' => $request->amount,
+                'status' => 'paid',
+            ]);
+
+            foreach ($request->courses as $course) {
+                InvoiceCourse::create([
+                    'invoice_id' => $invoice['id'],
+                    'course_id' => $course['id'],
+                ]);
+            }
+        }
+
+        return new InvoiceResource($invoice->loadMissing('courses'));
+    }
+
+    public function getMyCourse(Request $request)
+    {
+        $user = $request->user();
+        $userId = $user->id;
+
+        $myInvoice = DB::table('invoices')->select('id')->where('user_id','=',$userId);
+        $listIDCourses = DB::table('invoice_courses')->select('course_id')->distinct()->whereIn('invoice_id',$myInvoice);
+        $myCourse = DB::table('courses')->select('*')->whereIn('id',$listIDCourses);
+        return $myCourse->get();;
+
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
+     * @return \App\Http\Resources\InvoiceResource
      */
     public function show(Invoice $invoice)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateInvoiceRequest  $request
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateInvoiceRequest $request, Invoice $invoice)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Invoice $invoice)
-    {
-        //
+        $invoice->loadMissing('courses');
+        return new InvoiceResource($invoice);
     }
 }
