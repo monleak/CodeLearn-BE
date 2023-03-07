@@ -8,6 +8,8 @@ use App\Http\Requests\API\Lesson\UpdateLessonRequest;
 use App\Http\Resources\LessonResource;
 use App\Models\Chapter;
 use App\Models\Lesson;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LessonController extends ApiController
 {
@@ -33,6 +35,14 @@ class LessonController extends ApiController
         return $this->respondSuccess(['lesson' => $lesson]);
     }
 
+    public function updateOrder(Request $request){
+        $newOrders = $request->newOrders;
+        foreach($newOrders as $newOrder){
+            DB::table('lessons')
+            ->where('id',$newOrder['idLesson'])
+            ->update(array('order' => $newOrder['newOrder']));
+        }
+    }
     /**
      * Display the specified resource.
      *

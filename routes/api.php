@@ -10,6 +10,7 @@ use App\Http\Controllers\API\V1\PermissionController;
 use App\Http\Controllers\API\V1\LessonController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\InvoiceController;
+use App\Http\Controllers\API\V1\ChapterController;
 use App\Http\Controllers\API\V1\InvoiceCourseController;
 
 /*
@@ -32,12 +33,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
     Route::apiResource('courses', CourseController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('chapters', ChapterController::class);
+    Route::post("chapters/updateOrder", [ChapterController::class, 'updateOrder']);
 
     Route::get('courses/{course}/curriculum', [CourseController::class, 'getCurriculum']);
 
     Route::group(["prefix" => "lessons"], function () {
         Route::get("{lesson}", [LessonController::class, 'show']);
         Route::post("create-lesson/{chapter}", [LessonController::class, 'store']);
+        Route::post("updateOrder", [LessonController::class, 'updateOrder']);
         Route::delete("{lesson}", [LessonController::class, 'destroy']);
     });
 
@@ -62,6 +65,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
 
     Route::post("purchase", [InvoiceController::class, 'purchase']);
     Route::apiResource('invoices', InvoiceController::class);
-    
+
     Route::get("my-learning", [InvoiceController::class, 'getMyCourse'])->middleware('auth:sanctum');
 });
