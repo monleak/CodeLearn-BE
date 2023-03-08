@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\CourseCollection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends ApiController
 {
@@ -89,9 +90,29 @@ class CourseController extends ApiController
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCurriculum(Course $course)
+    public function getCurriculum(Request $request,Course $course)
     {
+        $user = $request->user();
+        $userId = $user->id;
+
+        // $listChapter = DB::table('chapters')->select('id')->where('course_id','=',$course->id);
+        // DB::table('lessons')->select('id')->whereIn('chapter_id',$listChapter);
+
         $course->loadMissing(['chapters.lessons']);
+
+        foreach($course->chapters as $key1 => $chapter){
+            foreach($course->chapters[$key1]->lessons as $key2 => $lesson){
+                $progress = DB::table('user_lessons')->select('progress')
+                                ->where('user_id','=',$userId)
+                                ->where('lesson_id','=',$lesson->id)->first();
+                
+                // $data = json_decode($lesson, true);
+                // $data['progress'] = $progress;
+                // $course->chapters[$key1]->lessons[$key2] = json_encode($data);
+                $course->chapters[$key1]->lessons[$key2]['progress'] = $progress == NULL ? -1 : $progress->progress;
+            }
+        }
+
         return $this->respondSuccess(['curriculum' => $course->chapters]);
     }
 }

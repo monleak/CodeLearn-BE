@@ -37,7 +37,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
     Route::apiResource('chapters', ChapterController::class);
     Route::post("chapters/updateOrder", [ChapterController::class, 'updateOrder']);
 
-    Route::get('courses/{course}/curriculum', [CourseController::class, 'getCurriculum']);
+    Route::get('courses/{course}/curriculum', [CourseController::class, 'getCurriculum'])->middleware('auth:sanctum');
 
     Route::group(["prefix" => "lessons"], function () {
         Route::get("{lesson}", [LessonController::class, 'show']);

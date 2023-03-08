@@ -42,5 +42,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\Chapter::factory()
             ->count(6)
             ->create();
+        \App\Models\Lesson::factory()
+            ->count(6)
+            ->create();
     }
 }
