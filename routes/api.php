@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\Auth\LoginController;
 use App\Http\Controllers\API\V1\Auth\RegisterController;
 use App\Http\Controllers\API\V1\CourseController;
+use App\Http\Controllers\API\V1\FeedbackController;
 use App\Http\Controllers\API\V1\PermissionController;
 use App\Http\Controllers\API\V1\LessonController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\InvoiceController;
 use App\Http\Controllers\API\V1\ChapterController;
 use App\Http\Controllers\API\V1\InvoiceCourseController;
+use App\Models\Course;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +37,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
     Route::apiResource('chapters', ChapterController::class);
     Route::post("chapters/updateOrder", [ChapterController::class, 'updateOrder']);
 
-    Route::get('courses/{course}/curriculum', [CourseController::class, 'getCurriculum']);
+    Route::get('courses/{course}/curriculum', [CourseController::class, 'getCurriculum'])->middleware('auth:sanctum');
 
     Route::group(["prefix" => "lessons"], function () {
         Route::get("{lesson}", [LessonController::class, 'show']);
@@ -61,6 +63,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
 
         Route::post("{permission}/add-to-role/{role}", [PermissionController::class, 'addPermissionToRole']);
         Route::put("{permission}/remove-from-role/{role}", [PermissionController::class, 'removePermissionFromRole']);
+    });
+    Route::group(["prefix" => "feedback"], function () {
+        Route::get("/", [FeedbackController::class, 'index']);
+        Route::post("create", [FeedbackController::class, 'store']);
+        Route::put("update/{feedback}", [FeedbackController::class, 'update']);
+        Route::get("course/{course}", [FeedbackController::class, 'getFeedbackByCourse']);
     });
 
     Route::post("purchase", [InvoiceController::class, 'purchase']);
