@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Resources\FeedbackResource;
+use App\Models\Course;
 use App\Models\Feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class FeedbackController extends APIController
     public function store(Request $request)
     {
         if (Feedback::where('user_id', $request->user_id)->where('course_id', $request->course_id)->exists()) {
-            return $this->respondSuccessWithMessage([],"Bạn đã đánh giá khóa học này rồi");
+            return $this->respondSuccessWithMessage([], "Bạn đã đánh giá khóa học này rồi");
         } else {
             Feedback::create([
                 'user_id' => $request->user_id,
@@ -82,5 +83,10 @@ class FeedbackController extends APIController
             return $this->respondErrorWithMessage($exception->getMessage());
         }
         return $this->respondSuccessWithMessage([], "Xóa feedback thành công");
+    }
+    public function getFeedbackByCourse(Request $request, Course $course)
+    {
+        $feedbacks = Feedback::where('course_id', $course->id)->get();
+        return $this->respondSuccess(FeedbackResource::collection($feedbacks));
     }
 }

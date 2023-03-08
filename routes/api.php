@@ -13,6 +13,7 @@ use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\InvoiceController;
 use App\Http\Controllers\API\V1\ChapterController;
 use App\Http\Controllers\API\V1\InvoiceCourseController;
+use App\Models\Course;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'App\Http\Controllers\API\V1'], f
         Route::get("/", [FeedbackController::class, 'index']);
         Route::post("create", [FeedbackController::class, 'store']);
         Route::put("update/{feedback}", [FeedbackController::class, 'update']);
+        Route::get("course/{course}", [FeedbackController::class, 'getFeedbackByCourse']);
     });
 
     Route::post("purchase", [InvoiceController::class, 'purchase']);
